@@ -2,30 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 class Counter extends React.Component {
-    state = {
-        count: 0
+
+    incrementClick = () => {
+        this.props.onChange(this.props.caption, 1);
     }
 
-    handleIncrement = (e) => {
-        this.props.incrementClickCb()
-        this.setState({
-            count: this.state.count + 1
-        })
-    }
-
-    handleDrement = (e) => {
-        this.props.decrementClickCb()
-        this.setState({
-            count: this.state.count - 1
-        })
+    decrementClick = () => {
+        this.props.onChange(this.props.caption, -1);
     }
 
     render() {
         return (
             <div>
-                <button onClick={this.handleIncrement}>+</button>
-                <button onClick={this.handleDrement}>-</button>
-                Counter {this.props.caption}: {this.state.count}
+                <button onClick={this.incrementClick}>+</button>
+                <button onClick={this.decrementClick}>-</button>
+                Counter {this.props.caption}: {this.props.value}
             </div>
         )
     }
