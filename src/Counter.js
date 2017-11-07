@@ -16,8 +16,6 @@ class Counter extends React.Component {
     
     
     componentDidMount() {
-        console.log(typeof this.getOwnState)
-    
         store.subscribe(this.onChange);
     }
 
