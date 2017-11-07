@@ -1,35 +1,40 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CounterStore from './stores/CounterStore';
+import store from './Store';
 import * as Actions from './Actions';
 
 class Counter extends React.Component {
+    
+    getOwnState = () => {
+        return {
+            value: store.getState()[this.props.caption]
+        };
+    }
 
-    state = {
-        count: CounterStore.getCounterValues()[this.props.caption]
-    };
+    state = this.getOwnState();
 
+    
+    
     componentDidMount() {
-        CounterStore.addChangeListener(this.onChange);
+        console.log(typeof this.getOwnState)
+    
+        store.subscribe(this.onChange);
     }
 
     componentWillUnmount() {
-        CounterStore.removeChangeListener(this.onChange)
+        store.unsubscribe(this.onChange);
     }
 
     onChange = () => {
-        const newCount = CounterStore.getCounterValues()[this.props.caption];
-        this.setState({
-            count: newCount
-        })
+        this.setState(this.getOwnState());
     }
 
     handleIncrement = () => {
-        Actions.increment(this.props.caption);
+        store.dispatch(Actions.increment(this.props.caption));
     }
 
     handleDrement = () => {
-        Actions.decrement(this.props.caption);
+        store.dispatch(Actions.decrement(this.props.caption));
     }
 
     render() {
@@ -37,7 +42,7 @@ class Counter extends React.Component {
             <div>
                 <button onClick={this.handleIncrement}>+</button>
                 <button onClick={this.handleDrement}>-</button>
-                Counter {this.props.caption}: {this.state.count}
+                Counter {this.props.caption}: {this.state.value}
             </div>
         )
     }

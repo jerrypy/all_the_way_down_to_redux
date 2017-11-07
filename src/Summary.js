@@ -1,32 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CounterStore from './stores/CounterStore';
-import SummaryStore from './stores/SummaryStore';
+import store from './Store';
 import * as Actions from './Actions';
 
 class Summary extends React.Component {
-    state = {
-        summary: SummaryStore.getSummary()
+    
+    state = store.getState();
+
+    getSummary = () => {
+        let sum = 0;
+        for (const key in this.state) {
+            sum += this.state[key];
+        }
+        return sum;
     }
 
     onChange = () => {
-        this.setState({
-            summary: SummaryStore.getSummary()
-        })
+        this.setState(store.getState());
     }
 
     componentDidMount() {
-        SummaryStore.addChangeListener(this.onChange);
+        store.subscribe(this.onChange);
     }
 
     componentWillUnmount() {
-        SummaryStore.removeChangeListener(this.onChange);
+        store.unsubscribe(this.onChange);
     }
 
     render() {
         return (
             <div>
-                Total counts: {this.state.summary}
+                Total counts: {this.getSummary()}
             </div>
         )
     }
